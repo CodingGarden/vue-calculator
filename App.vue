@@ -1,7 +1,9 @@
 <template lang="html">
   <main class="calculator">
     <div ref="display" class="display">
-      <span ref="displayText">{{display}}</span>
+      <div class="display-text">
+        <span ref="displayText">{{display}}</span>
+      </div>
     </div>
     <div class="buttons">
       <div class="button-row" v-for="row in buttonRows">
@@ -24,11 +26,13 @@ export default {
     updateDisplay(value) {
       this.display = value;
       this.$nextTick(() => {
-        let fontSize = 5;
-        this.$refs.display.setAttribute('style', 'font-size:5vw');
+        let fontSize = 4;
+        this.$refs.display.setAttribute('style', 'font-size:4vw');
         while (this.$refs.displayText.offsetWidth + 30 > this.$refs.display.offsetWidth) {
           this.$refs.display.setAttribute('style', 'font-size:' + fontSize + 'vw');
           fontSize -= 0.1;
+
+          if (fontSize <= 0.1) break;
         }
       })
     },
@@ -38,7 +42,6 @@ export default {
     }
   },
   data: (vm) => ({
-    displayFont: '4vw',
     display: '0',
     previousValue: '',
     currentOperator: '',
@@ -86,13 +89,12 @@ export default {
         type: 'special'
       }, {
         text: '+/-',
-        type: 'special'
-      }, {
-        text: '😁',
-        type: 'special'
+        type: 'special',
+        style: 'flex-basis: calc(100%/2)'
       }, {
         text: '÷',
-        type: 'operator'
+        type: 'operator',
+        style: 'flex-basis: calc(100%/2)'
       }],
       [{
         text: '7',
@@ -154,15 +156,15 @@ export default {
 body {
   width: 100vw;
   height: 100vh;
-  font-size: 4vw;
+  font-size: 2.5vw;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .calculator {
-  width: 50vw;
-  height: 70vh;
+  width: 30vw;
+  height: calc(30vw * 1.4);
   font-family: sans-serif;
   border-radius: 5px;
   overflow: hidden;
@@ -170,19 +172,24 @@ body {
 }
 
 .display {
-  height: 10vh;
+  height: calc(30vw * 0.2);
   background: #989898;
-  text-align: right;
   color: white;
-  font-size: 5vw;
+  font-size: 4vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.display-text {
+  padding: 0.5vw;
+  text-align: right;
 }
 
 .buttons {
-  height: 60vh;
+  height: calc(30vw * 1.2);
   text-align: center;
 }
-
-/* ​row: display: flex; flex-wrap: wrap; 0 button: flex-basis: calc(100% /2); */
 
 .button-row {
   height: 20%;
