@@ -1,7 +1,7 @@
 <template lang="html">
   <main class="calculator">
-    <div class="display">
-      {{display}}
+    <div ref="display" class="display">
+      <span ref="displayText">{{display}}</span>
     </div>
     <div class="buttons">
       <div class="button-row" v-for="row in buttonRows">
@@ -21,11 +21,24 @@
 <script>
 export default {
   methods: {
+    updateDisplay(value) {
+      this.display = value;
+      this.$nextTick(() => {
+        let fontSize = 5;
+        this.$refs.display.setAttribute('style', 'font-size:5vw');
+        while (this.$refs.displayText.offsetWidth + 30 > this.$refs.display.offsetWidth) {
+          this.$refs.display.setAttribute('style', 'font-size:' + fontSize + 'vw');
+          fontSize -= 0.1;
+        }
+      })
+    },
     performOperation() {
-      this.display = this.operations[this.currentOperator](+this.previousValue, +this.display);
+      const value = this.operations[this.currentOperator](+this.previousValue, +this.display);
+      this.updateDisplay(value);
     }
   },
   data: (vm) => ({
+    displayFont: '4vw',
     display: '0',
     previousValue: '',
     currentOperator: '',
@@ -33,14 +46,14 @@ export default {
       number(button) {
         if (vm.previousValue === null) {
           vm.previousValue = Number(vm.display);
-          vm.display = '';
+          vm.updateDisplay('');
         }
         if (button.text == '.' && vm.display.includes('.')) return;
 
-        vm.display += button.text;
+        vm.updateDisplay(vm.display + button.text);
 
-        if (vm.display[0] == '0') {
-          vm.display = vm.display.slice(1);
+        if (vm.display.length > 1 && vm.display[0] == '0' && vm.display[1] != '.') {
+          vm.updateDisplay(vm.display.slice(1));
         }
       },
       operator(button) {
@@ -52,9 +65,9 @@ export default {
       },
       special(button) {
         if (button.text == 'AC') {
-          vm.display = '0';
+          vm.updateDisplay('0');
         } else if (button.text == '+/-') {
-          vm.display *= -1;
+          vm.updateDisplay(vm.display * -1);
         } else if (button.text == '=') {
           vm.performOperation();
           vm.currentOperator = '';
@@ -161,7 +174,7 @@ body {
   background: #989898;
   text-align: right;
   color: white;
-  font-size: 1.5em;
+  font-size: 5vw;
 }
 
 .buttons {

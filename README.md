@@ -20,5 +20,5 @@
   * [x] Number button pressed after operation, update display with new number
   * [x] Equals button performs operation and updates display
   * [x] Period sets decimal, cannot add more than 1 period
-  * [ ] Should not allow zero at beginning of number
+  * [x] Should not allow zero at beginning of number
 * [ ] *STRETCH* Display text grows/shrinks to length of display
