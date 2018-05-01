@@ -1,5 +1,20 @@
 # Build a Calculator with Vue.js
 
+## Usage
+
+```sh
+npm install -g @vue/cli
+vue serve App.vue
+```
+
+## Build
+
+```sh
+vue build App.vue
+```
+
+## Steps
+
 * [x] Create App.vue
 * [x] Create basic layout
 * [x] Store buttons on data

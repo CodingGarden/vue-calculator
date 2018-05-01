@@ -37,8 +37,10 @@ export default {
       })
     },
     performOperation() {
-      const value = this.operations[this.currentOperator](+this.previousValue, +this.display);
-      this.updateDisplay(value);
+      if (this.previousValue) {
+        const value = this.operations[this.currentOperator](+this.previousValue, +this.display);
+        this.updateDisplay(value);
+      }
     }
   },
   data: (vm) => ({
